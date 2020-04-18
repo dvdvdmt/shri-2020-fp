@@ -1,4 +1,4 @@
-import {allPass, equals, pipe, prop} from 'ramda';
+import {allPass, equals, pipe, prop, values, gte, __, filter, length, tap, omit, all} from 'ramda';
 import {SHAPES as Shape, COLORS as Color} from '../constants.js';
 
 /**
@@ -32,12 +32,13 @@ const isWhite = equals(Color.WHITE);
 // 1. Красная звезда, зеленый квадрат, все остальные белые.
 const isStarRed = pipe(getStar, isRed);
 const isSquareGreen = pipe(getSquare, isGreen);
-const isCircleWhite = pipe(getCircle, isWhite);
-const isTriangleWhite = pipe(getTriangle, isWhite);
-export const validateFieldN1 = allPass([isStarRed, isSquareGreen, isCircleWhite, isTriangleWhite]);
+const isOtherWhite = pipe(omit([Shape.STAR, Shape.SQUARE]), values, all(isWhite));
+export const validateFieldN1 = allPass([isStarRed, isSquareGreen, isOtherWhite]);
 
 // 2. Как минимум две фигуры зеленые.
-export const validateFieldN2 = () => false;
+const isEqualOrGreaterThanTwo = gte(__, 2);
+const isTwoGreen = pipe(values, filter(isGreen), length, isEqualOrGreaterThanTwo);
+export const validateFieldN2 = isTwoGreen;
 
 // 3. Количество красных фигур равно кол-ву синих.
 export const validateFieldN3 = () => false;
