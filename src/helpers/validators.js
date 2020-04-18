@@ -1,6 +1,9 @@
+import {allPass, equals, pipe, prop} from 'ramda';
+import {SHAPES as Shape, COLORS as Color} from '../constants.js';
+
 /**
  * @file Домашка по FP ч. 1
- * 
+ *
  * Основная задача — написать самому, или найти в FP библиотеках функции anyPass/allPass
  * Эти функции/их аналоги есть и в ramda и в lodash
  *
@@ -13,14 +16,25 @@
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
 
-// 1. Красная звезда, зеленый квадрат, все остальные белые.
-export const validateFieldN1 = ({star, square, triangle, circle}) => {
-    if (triangle !== 'white' || circle !== 'white') {
-        return false;
-    }
+// prop getters
+const getStar = prop(Shape.STAR);
+const getSquare = prop(Shape.SQUARE);
+const getCircle = prop(Shape.CIRCLE);
+const getTriangle = prop(Shape.TRIANGLE);
 
-    return star === 'red' && square === 'green';
-};
+// color predicates
+const isRed = equals(Color.RED);
+const isGreen = equals(Color.GREEN);
+const isOrange = equals(Color.ORANGE);
+const isBlue = equals(Color.BLUE);
+const isWhite = equals(Color.WHITE);
+
+// 1. Красная звезда, зеленый квадрат, все остальные белые.
+const isStarRed = pipe(getStar, isRed);
+const isSquareGreen = pipe(getSquare, isGreen);
+const isCircleWhite = pipe(getCircle, isWhite);
+const isTriangleWhite = pipe(getTriangle, isWhite);
+export const validateFieldN1 = allPass([isStarRed, isSquareGreen, isCircleWhite, isTriangleWhite]);
 
 // 2. Как минимум две фигуры зеленые.
 export const validateFieldN2 = () => false;
