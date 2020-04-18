@@ -1,5 +1,22 @@
-import {allPass, equals, pipe, prop, values, gte, __, filter, length, tap, omit, all} from 'ramda';
-import {SHAPES as Shape, COLORS as Color} from '../constants.js';
+import {
+  __,
+  all,
+  allPass,
+  apply,
+  countBy,
+  equals,
+  filter,
+  gte,
+  identity,
+  length,
+  omit,
+  pick,
+  pipe,
+  prop,
+  tap,
+  values,
+} from 'ramda';
+import {COLORS as Color, SHAPES as Shape} from '../constants.js';
 
 /**
  * @file Домашка по FP ч. 1
@@ -15,6 +32,9 @@ import {SHAPES as Shape, COLORS as Color} from '../constants.js';
  *
  * Если какие либо функции написаны руками (без использования библиотек) это не является ошибкой
  */
+
+// utils
+const log = (message = 'log') => tap((value) => console.log(message, value));
 
 // prop getters
 const getStar = prop(Shape.STAR);
@@ -41,7 +61,9 @@ const isTwoGreen = pipe(values, filter(isGreen), length, isEqualOrGreaterThanTwo
 export const validateFieldN2 = isTwoGreen;
 
 // 3. Количество красных фигур равно кол-ву синих.
-export const validateFieldN3 = () => false;
+const isRedCountEqualToBlue = pipe(pick([Color.BLUE, Color.RED]), values, apply(equals), equals(true));
+const isCountOfRedShapesEqualToBlue = pipe(values, countBy(identity), isRedCountEqualToBlue);
+export const validateFieldN3 = isCountOfRedShapesEqualToBlue;
 
 // 4. Синий круг, красная звезда, оранжевый квадрат
 export const validateFieldN4 = () => false;
