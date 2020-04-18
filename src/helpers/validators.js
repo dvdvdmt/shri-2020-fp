@@ -61,9 +61,8 @@ const isTwoGreen = pipe(values, filter(isGreen), length, isEqualOrGreaterThanTwo
 export const validateFieldN2 = isTwoGreen;
 
 // 3. Количество красных фигур равно кол-ву синих.
-const isRedCountEqualToBlue = pipe(pick([Color.BLUE, Color.RED]), values, apply(equals), equals(true));
-const isCountOfRedShapesEqualToBlue = pipe(values, countBy(identity), isRedCountEqualToBlue);
-export const validateFieldN3 = isCountOfRedShapesEqualToBlue;
+const isCountOfRedShapesEqualToBlueOnes = pipe(values, countBy(identity), ({red, blue}) => (red === blue));
+export const validateFieldN3 = isCountOfRedShapesEqualToBlueOnes;
 
 // 4. Синий круг, красная звезда, оранжевый квадрат
 export const validateFieldN4 = () => false;
