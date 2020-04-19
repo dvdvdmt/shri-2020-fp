@@ -2,17 +2,18 @@ import {
   __,
   all,
   allPass,
-  apply,
+  anyPass,
   countBy,
   equals,
   filter,
   gte,
   identity,
+  keys,
   length,
   omit,
-  pick,
   pipe,
-  prop, propEq,
+  prop,
+  propEq,
   tap,
   values,
 } from 'ramda';
@@ -62,7 +63,8 @@ export const validateFieldN2 = isTwoGreen;
 
 // 3. Количество красных фигур равно кол-ву синих.
 const isRedCountEqualBlue = ({red, blue}) => (red === blue);
-export const validateFieldN3 = pipe(values, countBy(identity), isRedCountEqualBlue);
+const countColors = countBy(identity);
+export const validateFieldN3 = pipe(values, countColors, isRedCountEqualBlue);
 
 // 4. Синий круг, красная звезда, оранжевый квадрат
 const isCircleBlue = propEq(Shape.CIRCLE, Color.BLUE);
@@ -70,7 +72,11 @@ const isSquareOrange = propEq(Shape.SQUARE, Color.ORANGE);
 export const validateFieldN4 = allPass([isCircleBlue, isStarRed, isSquareOrange]);
 
 // 5. Три фигуры одного любого цвета кроме белого (четыре фигуры одного цвета – это тоже true).
-export const validateFieldN5 = () => false;
+const getWhite = prop(Color.WHITE);
+const lessOrEqualThanOne = anyPass([gte(1), equals(undefined)]);
+const countOfWhiteShapesLessOrEqualToOne = pipe(getWhite, lessOrEqualThanOne);
+const notWhiteShapesOfSameColor = pipe(omit([Color.WHITE]), keys, length, equals(1));
+export const validateFieldN5 = pipe(values, countColors, allPass([countOfWhiteShapesLessOrEqualToOne, notWhiteShapesOfSameColor]));
 
 // 6. Две зеленые фигуры (одна из них треугольник), еще одна любая красная.
 export const validateFieldN6 = () => false;
