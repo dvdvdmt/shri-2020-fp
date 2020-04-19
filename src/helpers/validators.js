@@ -41,14 +41,10 @@ const log = (message = 'log') => tap((value) => console.log(message, value));
 // prop getters
 const getStar = prop(Shape.STAR);
 const getSquare = prop(Shape.SQUARE);
-const getCircle = prop(Shape.CIRCLE);
-const getTriangle = prop(Shape.TRIANGLE);
 
 // color predicates
 const isRed = equals(Color.RED);
 const isGreen = equals(Color.GREEN);
-const isOrange = equals(Color.ORANGE);
-const isBlue = equals(Color.BLUE);
 const isWhite = equals(Color.WHITE);
 
 // 1. Красная звезда, зеленый квадрат, все остальные белые.
