@@ -15,19 +15,32 @@
  * Ответ будет приходить в поле {result}
  */
 import Api from '../tools/api';
-import {allPass, gte, ifElse, length, lte, pipe, prop, tap, __, andThen, otherwise} from 'ramda';
+import {
+    allPass,
+    gte,
+    ifElse,
+    length,
+    lte,
+    pipe,
+    prop,
+    tap,
+    __,
+    andThen,
+    otherwise,
+    test,
+} from 'ramda';
 
 const api = new Api();
 const fetchBinaryString = (decimalNumber) => api.get('https://api.tech/numbers/base', {from: 10, to: 2, number: decimalNumber});
 const fetchAnimal = (animalId) => api.get(`https://animals.tech/${animalId}`, {});
-const decimalNumberRegEx = /(^\d+$|^\d+\.\d*$|^\d*\.\d+$)/;
+const decimalNumberRegEx = test(/(^\d+$|^\d+\.\d*$|^\d*\.\d+$)/);
+const numberLengthBetweenTwoAndTen = pipe(length, allPass([gte(__, 2), lte(__, 10)]));
+const validateNumber = allPass([numberLengthBetweenTwoAndTen, decimalNumberRegEx]);
 
 const processSequence = ({value, writeLog, handleSuccess, handleError}) => {
     const log = tap(writeLog);
     const getResult = prop('result');
-    const numberLengthBetweenTwoAndTen = pipe(length, allPass([gte(__, 2), lte(__, 10)]));
     const validationError = () => {handleError('ValidationError')};
-    const validateNumber = allPass([numberLengthBetweenTwoAndTen]);
 
     const step1_logString = log;
     const step2_validateNumberAndContinueOnSuccess = (next) => ifElse(validateNumber, next, validationError);
