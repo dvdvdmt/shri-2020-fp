@@ -98,7 +98,9 @@ const starIsNotRedNorWhite = pipe(getStar, colorIsNotRedNorWhite);
 export const validateFieldN8 = starIsNotRedNorWhite;
 
 // 9. Все фигуры зеленые.
-export const validateFieldN9 = () => false;
+const getGreen = prop(Color.GREEN);
+const allShapesAreGreen = pipe(countColors, allPass([allShapesOfOneColor, getGreen]))
+export const validateFieldN9 = allShapesAreGreen;
 
 // 10. Треугольник и квадрат одного цвета (не белого)
 export const validateFieldN10 = () => false;
