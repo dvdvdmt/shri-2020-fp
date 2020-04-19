@@ -79,7 +79,11 @@ const notWhiteShapesOfSameColor = pipe(omit([Color.WHITE]), keys, length, equals
 export const validateFieldN5 = pipe(values, countColors, allPass([countOfWhiteShapesLessOrEqualToOne, notWhiteShapesOfSameColor]));
 
 // 6. Две зеленые фигуры (одна из них треугольник), еще одна любая красная.
-export const validateFieldN6 = () => false;
+const isTriangleGreen = propEq(Shape.TRIANGLE, Color.GREEN);
+const twoShapesAreGreen = propEq(Color.GREEN, 2);
+const oneShapeIsRed = propEq(Color.RED, 1);
+const twoShapesAreGreenAndOneRed = pipe(values, countColors, allPass([twoShapesAreGreen, oneShapeIsRed]))
+export const validateFieldN6 = allPass([isTriangleGreen, twoShapesAreGreenAndOneRed]);
 
 // 7. Все фигуры оранжевые.
 export const validateFieldN7 = () => false;
