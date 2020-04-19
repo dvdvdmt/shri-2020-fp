@@ -63,8 +63,8 @@ export const validateFieldN2 = isTwoGreen;
 
 // 3. Количество красных фигур равно кол-ву синих.
 const isRedCountEqualBlue = ({red, blue}) => (red === blue);
-const countColors = countBy(identity);
-export const validateFieldN3 = pipe(values, countColors, isRedCountEqualBlue);
+const countColors = pipe(values, countBy(identity));
+export const validateFieldN3 = pipe(countColors, isRedCountEqualBlue);
 
 // 4. Синий круг, красная звезда, оранжевый квадрат
 const isCircleBlue = propEq(Shape.CIRCLE, Color.BLUE);
@@ -76,13 +76,13 @@ const getWhite = prop(Color.WHITE);
 const lessOrEqualThanOne = anyPass([gte(1), equals(undefined)]);
 const countOfWhiteShapesLessOrEqualToOne = pipe(getWhite, lessOrEqualThanOne);
 const notWhiteShapesOfSameColor = pipe(omit([Color.WHITE]), keys, length, equals(1));
-export const validateFieldN5 = pipe(values, countColors, allPass([countOfWhiteShapesLessOrEqualToOne, notWhiteShapesOfSameColor]));
+export const validateFieldN5 = pipe(countColors, allPass([countOfWhiteShapesLessOrEqualToOne, notWhiteShapesOfSameColor]));
 
 // 6. Две зеленые фигуры (одна из них треугольник), еще одна любая красная.
 const isTriangleGreen = propEq(Shape.TRIANGLE, Color.GREEN);
 const twoShapesAreGreen = propEq(Color.GREEN, 2);
 const oneShapeIsRed = propEq(Color.RED, 1);
-const twoShapesAreGreenAndOneRed = pipe(values, countColors, allPass([twoShapesAreGreen, oneShapeIsRed]))
+const twoShapesAreGreenAndOneRed = pipe(countColors, allPass([twoShapesAreGreen, oneShapeIsRed]))
 export const validateFieldN6 = allPass([isTriangleGreen, twoShapesAreGreenAndOneRed]);
 
 // 7. Все фигуры оранжевые.
