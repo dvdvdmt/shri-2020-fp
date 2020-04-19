@@ -2,13 +2,13 @@ import {
   __,
   all,
   allPass,
+  any,
   anyPass,
   countBy,
   equals,
   filter,
   gte,
   identity,
-  keys,
   length,
   omit,
   pipe,
@@ -75,8 +75,8 @@ export const validateFieldN4 = allPass([isCircleBlue, isStarRed, isSquareOrange]
 const getWhite = prop(Color.WHITE);
 const lessOrEqualThanOne = anyPass([gte(1), equals(undefined)]);
 const countOfWhiteShapesLessOrEqualToOne = pipe(getWhite, lessOrEqualThanOne);
-const notWhiteShapesOfSameColor = pipe(omit([Color.WHITE]), keys, length, equals(1));
-export const validateFieldN5 = pipe(countColors, allPass([countOfWhiteShapesLessOrEqualToOne, notWhiteShapesOfSameColor]));
+const atLeastThreeShapesOfSameColor = pipe(omit([Color.WHITE]), values, log('values'), any(gte(__, 3)));
+export const validateFieldN5 = pipe(countColors, allPass([countOfWhiteShapesLessOrEqualToOne, atLeastThreeShapesOfSameColor]));
 
 // 6. Две зеленые фигуры (одна из них треугольник), еще одна любая красная.
 const isTriangleGreen = propEq(Shape.TRIANGLE, Color.GREEN);
