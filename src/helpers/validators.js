@@ -12,7 +12,7 @@ import {
   omit,
   pick,
   pipe,
-  prop,
+  prop, propEq,
   tap,
   values,
 } from 'ramda';
@@ -61,11 +61,13 @@ const isTwoGreen = pipe(values, filter(isGreen), length, isEqualOrGreaterThanTwo
 export const validateFieldN2 = isTwoGreen;
 
 // 3. Количество красных фигур равно кол-ву синих.
-const isCountOfRedShapesEqualToBlueOnes = pipe(values, countBy(identity), ({red, blue}) => (red === blue));
-export const validateFieldN3 = isCountOfRedShapesEqualToBlueOnes;
+const isRedCountEqualBlue = ({red, blue}) => (red === blue);
+export const validateFieldN3 = pipe(values, countBy(identity), isRedCountEqualBlue);
 
 // 4. Синий круг, красная звезда, оранжевый квадрат
-export const validateFieldN4 = () => false;
+const isCircleBlue = propEq(Shape.CIRCLE, Color.BLUE);
+const isSquareOrange = propEq(Shape.SQUARE, Color.ORANGE);
+export const validateFieldN4 = allPass([isCircleBlue, isStarRed, isSquareOrange]);
 
 // 5. Три фигуры одного любого цвета кроме белого (четыре фигуры одного цвета – это тоже true).
 export const validateFieldN5 = () => false;
