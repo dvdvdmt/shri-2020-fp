@@ -10,7 +10,7 @@ import {
   gte,
   identity,
   keys,
-  length,
+  length, not,
   omit,
   pipe,
   prop,
@@ -93,7 +93,9 @@ const allShapesAreOrange = pipe(countColors, allPass([allShapesOfOneColor, getOr
 export const validateFieldN7 = allShapesAreOrange;
 
 // 8. Не красная и не белая звезда.
-export const validateFieldN8 = () => false;
+const colorIsNotRedNorWhite = pipe(anyPass([isRed, isWhite]), not);
+const starIsNotRedNorWhite = pipe(getStar, colorIsNotRedNorWhite);
+export const validateFieldN8 = starIsNotRedNorWhite;
 
 // 9. Все фигуры зеленые.
 export const validateFieldN9 = () => false;
