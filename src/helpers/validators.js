@@ -9,6 +9,7 @@ import {
   filter,
   gte,
   identity,
+  keys,
   length,
   omit,
   pipe,
@@ -86,7 +87,10 @@ const twoShapesAreGreenAndOneRed = pipe(countColors, allPass([twoShapesAreGreen,
 export const validateFieldN6 = allPass([isTriangleGreen, twoShapesAreGreenAndOneRed]);
 
 // 7. Все фигуры оранжевые.
-export const validateFieldN7 = () => false;
+const allShapesOfOneColor = pipe(keys, length, equals(1));
+const getOrange = prop(Color.ORANGE);
+const allShapesAreOrange = pipe(countColors, allPass([allShapesOfOneColor, getOrange]))
+export const validateFieldN7 = allShapesAreOrange;
 
 // 8. Не красная и не белая звезда.
 export const validateFieldN8 = () => false;
