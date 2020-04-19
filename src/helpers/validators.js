@@ -11,7 +11,7 @@ import {
   identity,
   keys,
   length, not,
-  omit,
+  omit, pick,
   pipe,
   prop,
   propEq,
@@ -87,9 +87,9 @@ const twoShapesAreGreenAndOneRed = pipe(countColors, allPass([twoShapesAreGreen,
 export const validateFieldN6 = allPass([isTriangleGreen, twoShapesAreGreenAndOneRed]);
 
 // 7. Все фигуры оранжевые.
-const allShapesOfOneColor = pipe(keys, length, equals(1));
+const shapesHaveSameColor = pipe(keys, length, equals(1));
 const getOrange = prop(Color.ORANGE);
-const allShapesAreOrange = pipe(countColors, allPass([allShapesOfOneColor, getOrange]))
+const allShapesAreOrange = pipe(countColors, allPass([shapesHaveSameColor, getOrange]))
 export const validateFieldN7 = allShapesAreOrange;
 
 // 8. Не красная и не белая звезда.
@@ -99,8 +99,11 @@ export const validateFieldN8 = starIsNotRedNorWhite;
 
 // 9. Все фигуры зеленые.
 const getGreen = prop(Color.GREEN);
-const allShapesAreGreen = pipe(countColors, allPass([allShapesOfOneColor, getGreen]))
+const allShapesAreGreen = pipe(countColors, allPass([shapesHaveSameColor, getGreen]))
 export const validateFieldN9 = allShapesAreGreen;
 
 // 10. Треугольник и квадрат одного цвета (не белого)
-export const validateFieldN10 = () => false;
+const pickTriangleAndSquare = pick([Shape.TRIANGLE, Shape.SQUARE]);
+const noWhiteColor = pipe(getWhite, not);
+const triangleAndSquareOfSameColorExceptWhite = pipe(pickTriangleAndSquare, countColors, allPass([shapesHaveSameColor, noWhiteColor]));
+export const validateFieldN10 = triangleAndSquareOfSameColorExceptWhite;
